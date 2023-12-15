@@ -10,6 +10,8 @@ package inclassca;
  * Gheorghita Rata mda21563
  * Bernardo Gandara 2021283
  * Wellington 2021330
+ * 
+ * gitHub link: https://github.com/iav2002/inClassLab/blob/CA/src/inclassca/InClassCa.java
  */
 public class InClassCa {
 

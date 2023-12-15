@@ -42,36 +42,32 @@ public class InClassCa {
  
     public static void main(String[] args) {
        
-         String dbName = "world_cup";
+        String dbName = "world_cup";
         String[] teams = {"Ireland", "Brazil", "Argentina", "Japan", "Mexico", "Senegal", "Tunisia", "Qatar"};
         MatchSimulator simulator = new MatchSimulator(teams);
+        
+        DatabaseConnector dbConnManager = new DatabaseConnector("world_cup", "root", "root");
+        //Because of scope issues, I had to create this empty object and initialize it later
+        PlayerDataInserter playerInserter = null;
+        PlayerDataDisplayer playerViewer = null;
+        
+
+        try {
+            Connection conn = dbConnManager.getConnection();
+            DatabaseOperation dbOps = new MySqlDatabaseOperations(conn);
+            playerInserter = new PlayerDataInserter(conn);
+            playerViewer = new PlayerDataDisplayer(conn);
+            for (String team : teams) {
+                dbOps.createTable(team);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
          Options options = new Options();
         Utilities utilities = new Utilities();
         
-        String DB_URL = "jdbc:mysql://localhost/" + dbName;
-        String USER = "root";
-        String PASS = "Root_123";
-        // Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/", USER, PASS);
-            Statement stmt = conn.createStatement();
-            stmt.execute("CREATE SCHEMA IF NOT EXISTS " + dbName +";");
-            stmt.execute("USE " + dbName + ";");
-            for (String team : teams) {
-                stmt.execute(
-                        "CREATE TABLE IF NOT EXISTS "+ team + " ("
-                                + "name VARCHAR(30) NOT NULL,"
-                                + "number INT NOT NULL PRIMARY KEY,"
-                                + "birth VARCHAR(30),"
-                                + "position VARCHAR(30),"
-                                + "goalsScored INT,"
-                                + "background TEXT(1000));"
-                );                
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        
         int option;
         boolean exit = false;
         Scanner sc = new Scanner(System.in);
@@ -137,17 +133,14 @@ public class InClassCa {
                     System.out.println("Please enter the player's background: ");
                     background = sc.nextLine();                          
                     System.out.println("Thank you for entering a player"); 
-                    try {
-                        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                        Statement stmt = conn.createStatement();
-                        stmt.execute(
-                                String.format("INSERT INTO %s (name, number, birth, position, goalsScored, background) "
-                                        + "VALUES (\"%s\", %d, \"%s\", \"%s\", %d,  \"%s\") ;",
-                                        teamName, name, number, birth, position, goalsScored, background)
-                        );
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }      
+                    //Storing the player in the Database
+                    if (playerInserter != null) {
+                        playerInserter.insertPlayer(teamName, name, number, birth, position, goalsScored, background);
+                        System.out.println("Thank you for entering a player");
+                    } else {
+                    System.out.println("Database connection is not established. Cannot insert player data.");
+                    }
+                    
                 } else if (option == 2) {
                     boolean validTeam = false;
                     String teamName;
@@ -164,30 +157,11 @@ public class InClassCa {
                         if (teamName.toLowerCase().equals("exit")) break;
                         if (!validTeam) System.out.println("That is not one of the teams. Please try again!");
                     } while (!validTeam);
-                    try {
-                        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-                        Statement stmt = conn.createStatement();
-                        ResultSet rs = stmt.executeQuery("SELECT * from " + teamName + ";");
-                        String name;
-                        int number;
-                        String birth;
-                        String position;
-                        int goalsScored;
-                        String background;
-                        while (rs.next()) {
-                            name = rs.getString("name");
-                            number = rs.getInt("number");
-                            birth = rs.getString("birth");
-                            position = rs.getString("position");
-                            goalsScored = rs.getInt("goalsScored");
-                            background = rs.getString("background");              
-                            System.out.println(String.format("Name: %s -- Number: %d -- DoB: %s -- Position: %s -- Number of goals scored: %d", name, number, birth, position, goalsScored));
-                            System.out.println("Background:");
-                            System.out.println(background);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }                     
+                    if (playerViewer != null) {
+                        playerViewer.displayTeamPlayers(teamName);
+                    } else {
+                        System.out.println("Database connection is not established. Cannot display player data.");
+                    }
                 } else if (option == 3) {
                    
                     System.out.println("How many matches would you like to simulate?");

@@ -6,8 +6,10 @@ package inclassca;
 
 /**
  *
- * @author ignacioalarconvarela
+ * @author ignacioalarconvarela 2021357
  * Gheorghita Rata mda21563
+ * Bernardo Gandara 2021283
+ * Wellington 2021330
  */
 public class InClassCa {
 

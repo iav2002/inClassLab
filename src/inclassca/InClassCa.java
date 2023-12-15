@@ -16,7 +16,7 @@ public class InClassCa {
  
     public static void main(String[] args) {
         // TODO code application logic here
-        // allgood
+        // YA YA
     }
     
 }

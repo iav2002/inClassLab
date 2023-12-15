@@ -46,7 +46,7 @@ public class InClassCa {
         String[] teams = {"Ireland", "Brazil", "Argentina", "Japan", "Mexico", "Senegal", "Tunisia", "Qatar"};
         MatchSimulator simulator = new MatchSimulator(teams);
         
-        DatabaseConnector dbConnManager = new DatabaseConnector("world_cup", "root", "root");
+        DatabaseConnector dbConnManager = new DatabaseConnector("world_cup", "football", "Java is almost as good as football");
         //Because of scope issues, I had to create this empty object and initialize it later
         PlayerDataInserter playerInserter = null;
         PlayerDataDisplayer playerViewer = null;

@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  *
-<<<<<<< HEAD
+
  * @author ignacioalarconvarela 2021357
  * Gheorghita Rata mda21563
  * Bernardo Gandara 2021283
@@ -36,27 +36,19 @@ import java.util.Scanner;
  * Name 4:Wellington 
  * Number 4: 2021330
  * 
->>>>>>> b66ff25396e1144844de6aebd664b32f76cdfb7d
  */
 public class InClassCa {
 
  
     public static void main(String[] args) {
-<<<<<<< HEAD
-        // TODO code application logic here
-
-        // YA YA
-
-    }
-    
-    
-}
-=======
-        
+       
          String dbName = "world_cup";
         String[] teams = {"Ireland", "Brazil", "Argentina", "Japan", "Mexico", "Senegal", "Tunisia", "Qatar"};
         MatchSimulator simulator = new MatchSimulator(teams);
 
+         Options options = new Options();
+        Utilities utilities = new Utilities();
+        
         String DB_URL = "jdbc:mysql://localhost/" + dbName;
         String USER = "root";
         String PASS = "Root_123";
@@ -84,13 +76,9 @@ public class InClassCa {
         boolean exit = false;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("Welcome! What would you like to do today? Please enter the number corresponding to your choice.");
-            System.out.println("1. Enter a new player to a team.");
-            System.out.println("2. See the players on a team.");
-            System.out.println("3. Simulate a number of matches.");
-            System.out.println("4. Exit the programme.");            
+            options.printUserOptions();          
             try {
-                option = Integer.parseInt(sc.nextLine());
+                option = utilities.Get_user_int(1,4);
                 if (option == 1) {
                     boolean validTeam = false;
                     String teamName;

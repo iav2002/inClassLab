@@ -7,12 +7,11 @@ package inclassca;
 /**
  *
  * @author ignacioalarconvarela
+ * Gheorghita Rata mda21563
  */
 public class InClassCa {
 
-    /**
-     * @param args the command line arguments
-     */
+ 
     public static void main(String[] args) {
         // TODO code application logic here
         // allgood
